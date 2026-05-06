@@ -1,0 +1,227 @@
+{
+  "project_name_ja": "やさしいCFD",
+  "project_name_en": "EasyCFD",
+  "repo_name_suggestion": "easycfd",
+  "one_line_summary": "A desktop GUI assistant that helps CFD beginners run their first OpenFOAM simulations through natural language, safe OpenFOAM command execution, and guided explanations.",
+  "motivation": {
+    "personal_context": "The project is motivated by the difficulty of learning CFD with OpenFOAM as a beginner. The user experienced that the workflow, commands, case files, solver choices, and logs were confusing before the physics could be appreciated.",
+    "problem": "OpenFOAM is powerful but has a steep initial learning curve for beginners.",
+    "goal": "Help curious students take their first step into CFD without hiding the workflow completely."
+  },
+  "target_users": [
+    "CFD beginners",
+    "students curious about fluid simulation",
+    "self-learners trying OpenFOAM for the first time"
+  ],
+  "non_targets": [
+    "professional CFD engineers needing industrial accuracy",
+    "commercial CAE replacement users",
+    "arbitrary CAD-to-mesh automation users"
+  ],
+  "research_question_en": "Can a natural-language GUI assistant reduce the initial workflow barrier for students learning OpenFOAM-based CFD?",
+  "research_question_ja": "自然言語GUIアシスタントは、OpenFOAMを用いたCFD学習における初期ワークフローの障壁を下げられるか？",
+  "core_principle": "The LLM must not execute arbitrary shell commands. It should produce structured JSON plans that are validated before a safe runner executes whitelisted OpenFOAM commands.",
+  "mvp_scope": {
+    "supported_cases": [
+      "2D lid-driven cavity flow",
+      "2D channel flow"
+    ],
+    "supported_physics": [
+      "incompressible flow",
+      "laminar flow first",
+      "basic steady or transient template workflows"
+    ],
+    "allowed_commands": [
+      "blockMesh",
+      "checkMesh",
+      "icoFoam",
+      "simpleFoam",
+      "postProcess"
+    ],
+    "features": [
+      "template-based case generation",
+      "safe OpenFOAM command runner",
+      "log streaming or log display",
+      "residual parsing",
+      "residual plotting",
+      "beginner-friendly explanations",
+      "sample mode without API key",
+      "OpenAI API and Ollama local LLM provider support later"
+    ],
+    "out_of_scope": [
+      "arbitrary CAD import",
+      "snappyHexMesh automation",
+      "industrial accuracy claims",
+      "unrestricted shell access",
+      "remote clusters"
+    ]
+  },
+  "recommended_environment": {
+    "main_development_os": "Ubuntu",
+    "windows_role": "Packaging, installer testing, UI checks, future Windows release builds",
+    "reason": "OpenFOAM and CFD command workflows are easiest to integrate natively on Linux."
+  },
+  "planned_stack": {
+    "frontend": "Tauri + React + TypeScript",
+    "backend": "Python FastAPI initially, or Tauri Rust command layer later",
+    "cfd": "Native OpenFOAM on Ubuntu first; Docker or WSL runner later",
+    "llm": [
+      "OpenAI API",
+      "Ollama local models",
+      "No-LLM sample mode"
+    ],
+    "visualization": [
+      "residual plots first",
+      "generated PNG outputs",
+      "PyVista or ParaView later"
+    ]
+  },
+  "repository_structure": {
+    "AGENTS.md": "Instructions for Codex and other coding agents",
+    "CLAUDE.md": "Instructions for Claude Code",
+    "README.md": "User-facing project overview",
+    "PROJECT_BRIEF.md": "Detailed project context",
+    "apps/desktop": "Tauri + React app",
+    "backend/easycfd_core": "Python backend package",
+    "templates/cavity_2d": "OpenFOAM cavity template",
+    "templates/channel_2d": "OpenFOAM channel template",
+    "examples": "sample prompts and cases",
+    "docs": "architecture, research plan, user study notes",
+    "scripts": "development helper scripts"
+  },
+  "interfaces": {
+    "OpenFOAMRunner": {
+      "methods": [
+        "run_command(case_dir: str, command: str) -> dict"
+      ],
+      "implementations": [
+        "NativeLinuxRunner first",
+        "DockerRunner later",
+        "WSLRunner later"
+      ]
+    },
+    "LLMProvider": {
+      "methods": [
+        "generate_case_plan(user_prompt: str) -> dict",
+        "explain_log(log_text: str) -> str"
+      ],
+      "implementations": [
+        "MockProvider",
+        "OpenAIProvider",
+        "OllamaProvider"
+      ]
+    }
+  },
+  "safety_constraints": {
+    "allowed_commands": [
+      "blockMesh",
+      "checkMesh",
+      "icoFoam",
+      "simpleFoam",
+      "postProcess"
+    ],
+    "forbidden_patterns": [
+      "rm",
+      "mv",
+      "chmod",
+      "chown",
+      "curl",
+      "wget",
+      "sudo",
+      "python -c",
+      ";",
+      "&&",
+      "|",
+      ".."
+    ],
+    "workspace_policy": "Only write inside configured workspace such as ./runs or ~/.easycfd/workspaces.",
+    "llm_policy": "Never trust LLM output. Always validate against schema and safety rules."
+  },
+  "milestones": [
+    {
+      "name": "Repository bootstrap",
+      "tasks": [
+        "README",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".gitignore",
+        ".env.example",
+        "Python package layout",
+        "test setup"
+      ]
+    },
+    {
+      "name": "OpenFOAM runner",
+      "tasks": [
+        "NativeLinuxRunner",
+        "command whitelist",
+        "subprocess execution",
+        "stdout/stderr capture",
+        "safety tests"
+      ]
+    },
+    {
+      "name": "Template-based case generation",
+      "tasks": [
+        "cavity_2d template",
+        "dictionary rendering",
+        "parameter validation"
+      ]
+    },
+    {
+      "name": "Solver run and residual parsing",
+      "tasks": [
+        "run icoFoam/simpleFoam",
+        "save logs",
+        "parse residual history"
+      ]
+    },
+    {
+      "name": "Minimal GUI",
+      "tasks": [
+        "case selection",
+        "run button",
+        "log panel",
+        "residual chart",
+        "case summary"
+      ]
+    },
+    {
+      "name": "LLM structured planning",
+      "tasks": [
+        "MockProvider",
+        "OpenAIProvider",
+        "OllamaProvider",
+        "JSON schema validation",
+        "provider settings UI"
+      ]
+    },
+    {
+      "name": "Beginner explanations",
+      "tasks": [
+        "solver explanation",
+        "boundary condition explanation",
+        "command explanation",
+        "error explanation"
+      ]
+    }
+  ],
+  "first_agent_task": "Create the initial EasyCFD repository scaffold. Add a Python backend package under backend/easycfd_core, define OpenFOAMRunner, implement NativeLinuxRunner with a strict command whitelist, create a minimal .gitignore, .env.example, README, AGENTS.md, and CLAUDE.md. Do not implement the GUI yet. Add tests that verify unsafe commands are rejected.",
+  "coding_style": [
+    "Prefer simple readable code",
+    "Use Python type hints",
+    "Use Pydantic for schemas if FastAPI is used",
+    "Validate external inputs aggressively",
+    "Keep OpenFOAM logic isolated from GUI code",
+    "Do not let frontend code directly execute shell commands",
+    "Version LLM prompts and schemas in files"
+  ],
+  "testing_priorities": [
+    "command whitelist",
+    "workspace path validation",
+    "case plan schema validation",
+    "template parameter validation",
+    "log parser behavior",
+    "runner behavior when commands fail"
+  ]
+}
