@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "codex-worker": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["-m", "easycfd_mcp.codex_worker.server"],
+      "env": {
+        "PYTHONPATH": "/home/teru_26_2/webapp/EasyCFD",
+        "PATH": "/home/teru_26_2/.nvm/versions/node/v22.19.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      }
+    }
+  }
+}

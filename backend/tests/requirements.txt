@@ -1,0 +1,23 @@
+# Test dependencies for EasyCFD backend tests
+# Install with: pip install -r tests/requirements.txt
+
+# Core testing framework
+pytest>=7.4.0
+
+# Code coverage reporting
+pytest-cov>=4.1.0
+
+# Mocking and fixtures
+pytest-mock>=3.11.1
+
+# Parallel test execution (optional)
+pytest-xdist>=3.3.1
+
+# Test result formatting (optional)
+pytest-html>=3.2.0
+
+# Better assertion introspection (optional)
+pytest-clarity>=1.0.1
+
+# Timeout for long-running tests (optional)
+pytest-timeout>=2.1.0

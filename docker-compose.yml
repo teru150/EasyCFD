@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  openfoam:
+    image: openfoam/openfoam9-paraview56
+    container_name: easycfd-openfoam
+    volumes:
+      # Mount workspace directory for OpenFOAM case files
+      - ./runs:/workspace
+    working_dir: /workspace
+    command: /bin/bash -c "tail -f /dev/null"
+    environment:
+      # Source OpenFOAM environment
+      - FOAM_INST_DIR=/opt/openfoam9
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    networks:
+      - easycfd-network
+
+networks:
+  easycfd-network:
+    driver: bridge

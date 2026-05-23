@@ -1,0 +1,3 @@
+# MCP protocol library only
+# No OpenAI SDK needed - using local Codex CLI instead
+mcp>=0.9.0
